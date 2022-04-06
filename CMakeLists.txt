@@ -59,8 +59,6 @@ if(WITH_GOOGLE_TEST)
 
     add_executable(g_test_version test/g_test_version.cpp)
 
-    add_test(TestVersion g_test_version)
-
     set_target_properties(g_test_version PROPERTIES
         CXX_STANDARD 14
         CXX_STANDARD_REQUIRED ON
