@@ -3,7 +3,7 @@ name: 'C++ CI'
 on:
   push:
     branches:
-      - 01_homework_setup_build_farm
+      - 02_homework_ip_filter
   pull_request:
     branches: [ main ]
 
@@ -26,7 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: 01 homework release ${{ github.run_number }}
+          release_name: 02 homework "ip filter" release ${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -36,6 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./ip-filter-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ip-filter-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
