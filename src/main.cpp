@@ -3,7 +3,6 @@
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
 {
-    std::cout << "I have started" << std::endl;
     try {
         parse_ip(std::cin);
     }
