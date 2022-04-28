@@ -7,12 +7,12 @@ else()
     set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 endif()
 
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 # for running on windows
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
-project(ip_filter VERSION ${PROJECT_VESRION})
+project(ip_filter VERSION ${PROJECT_VERSION})
 
 option(WITH_TEST "Whether to build test" ON)
 
@@ -21,7 +21,7 @@ configure_file(src/version.h.in version.h)
 add_executable(ip_filter src/ip_filter.cpp src/main.cpp)
 
 set_target_properties(ip_filter PROPERTIES
-    CXX_STANDARD 14
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
