@@ -5,7 +5,7 @@ on:
     branches:
       - 01_homework_setup_build_farm
   pull_request:
-    branches: [ main ]
+    branches: [ main, 01_homework_setup_build_farm ]
 
 jobs:
   build:
@@ -15,10 +15,18 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
-      - run: cmake --build .
-      - run: cmake --build . --target test
-      - run: cmake --build . --target package
+#      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_BOOST_TEST=ON
+#      - run: cmake --build .
+#      - run: cmake --build . --target test
+#      - run: cmake --build . --target package
+      - name: Run clang-tidy
+        uses: HorstBaerbel/action-clang-tidy@1.2
+        with:
+          scandir: '.'
+          builddir: 'build'
+          excludedirs: ''
+          extensions: 'c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx'
+          cmakeoptions: ''
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -39,3 +47,4 @@ jobs:
           asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+
