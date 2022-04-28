@@ -8,6 +8,10 @@ else()
 endif()
 
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+
+# for running on windows
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+
 project(ip_filter VERSION ${PROJECT_VESRION})
 
 option(WITH_TEST "Whether to build test" ON)

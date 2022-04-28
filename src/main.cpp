@@ -3,9 +3,9 @@
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
 {
+    std::cout << "I have started" << std::endl;
     try {
-        std::ifstream f{R"(C:\Users\RunoVj\CLionProjects\otus_cpp_course\resource\ip_filter.tsv)"}; // TODO how to make it relative?
-        parse_ip(f);
+        parse_ip(std::cin);
     }
 
     catch(const std::exception &e)
