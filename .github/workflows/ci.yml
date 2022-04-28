@@ -5,7 +5,7 @@ on:
     branches:
       - 01_homework_setup_build_farm
   pull_request:
-    branches: [ main ]
+    branches: [ main, 01_homework_setup_build_farm ]
 
 jobs:
   build:
@@ -39,3 +39,11 @@ jobs:
           asset_path: ./helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_name: helloworld-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
+      - name: Run clang-tidy
+        uses: HorstBaerbel/action-clang-tidy@1.2
+        with:
+          scandir: '.'
+          builddir: '.'
+          excludedirs: ''
+          extensions: 'c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx'
+          cmakeoptions: ''
