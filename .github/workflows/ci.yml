@@ -5,7 +5,7 @@ on:
     branches:
       - 01_homework_setup_build_farm
   pull_request:
-    branches: [ main ]
+    branches: [ main, 01_homework_setup_build_farm ]
 
 jobs:
   build:
