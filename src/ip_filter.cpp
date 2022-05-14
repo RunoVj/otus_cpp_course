@@ -1,5 +1,6 @@
 #include "ip_filter.h"
 
+
 using std::ifstream;
 
 
@@ -24,6 +25,9 @@ std::vector<std::string> split(const std::string &str, char d)
 std::array<int, 4> parse4byte_ip_from_str(const std::string &str_ip)
 {
     auto vip = split(str_ip, '.');
+    if (vip.size() != 4) {
+        throw std::runtime_error("Wrong ip input: " + str_ip);
+    }
     assert(vip.size() == 4);
     std::array<int, 4> ip = {
         atoi(vip[0].c_str()),
@@ -35,8 +39,7 @@ std::array<int, 4> parse4byte_ip_from_str(const std::string &str_ip)
 }
 
 
-
-void parse_ip(std::istream &is)
+void parse_ip(std::istream &is, std::ostream &out)
 {
     std::vector<std::array<int, 4>> ip_pool;
     for (std::string line; std::getline(is, line);) {
@@ -44,30 +47,33 @@ void parse_ip(std::istream &is)
         ip_pool.push_back(parse4byte_ip_from_str(v));
     }
 
-    std::sort(ip_pool.begin(), ip_pool.end(),  std::greater<>());
+    std::sort(ip_pool.begin(), ip_pool.end(), std::greater<>());
     /// reverse lexicographically sort
-    for (auto v : ip_pool) {
-        std::cout << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3] << std::endl;
+    for (const auto &v: ip_pool) {
+        out << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3] << std::endl;
     }
 
     /// filter by first byte and output
-    for (auto v : ip_pool) {
+    for (const auto &v: ip_pool) {
         if (pattern_matches(0, v, 1)) {
-            std::cout << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3] << std::endl;
+            out << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3]
+                << std::endl;
         }
     }
 
     /// filter by first and second bytes and output
-    for (auto v : ip_pool) {
+    for (const auto &v: ip_pool) {
         if (pattern_matches(0, v, 46, 70)) {
-            std::cout << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3] << std::endl;
+            out << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3]
+                << std::endl;
         }
     }
 
     /// filter by any byte and output
-    for (auto v : ip_pool) {
-        if (std::any_of(v.begin(), v.end(), [](int v) {return v == 46;})) {
-            std::cout << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3] << std::endl;
+    for (const auto &v: ip_pool) {
+        if (std::any_of(v.begin(), v.end(), [](int v) { return v == 46; })) {
+            out << v[0] << '.' << v[1] << '.' << v[2] << '.' << v[3]
+                << std::endl;
         }
     }
 }

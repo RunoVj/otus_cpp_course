@@ -7,8 +7,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
         parse_ip(std::cin);
     }
 
-    catch(const std::exception &e)
-    {
+    catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
 

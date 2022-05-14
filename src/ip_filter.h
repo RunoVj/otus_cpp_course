@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <fstream>
 
+
 /**
  * ("",  '.') -> [""]
  * ("11", '.') -> ["11"]
@@ -18,7 +19,6 @@
  * ("11.22", '.') -> ["11", "22"]
  */
 std::vector<std::string> split(const std::string &str, char d);
-
 
 /// ("11.22.33.44") -> [11, 22, 33, 44]
 std::array<int, 4> parse4byte_ip_from_str(const std::string &str_ip);
@@ -33,7 +33,8 @@ bool pattern_matches([[maybe_unused]] int bias,
 
 
 template<typename T, typename... Args>
-bool pattern_matches(int bias, const std::array<int, 4> &ip, T t, Args... args) {
+bool pattern_matches(int bias, const std::array<int, 4> &ip, T t, Args... args)
+{
     if (ip[bias] != t) {
         return false;
     }
@@ -47,5 +48,4 @@ bool pattern_matches(int bias, const std::array<int, 4> &ip, T t, Args... args) 
 
 
 /// main function for ip parser
-void parse_ip(std::istream &is);
-
+void parse_ip(std::istream &is, std::ostream &out = std::cout);

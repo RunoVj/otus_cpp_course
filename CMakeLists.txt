@@ -16,8 +16,6 @@ project(ip_filter VERSION ${PROJECT_VERSION})
 
 option(WITH_TEST "Whether to build test" ON)
 
-configure_file(src/version.h.in version.h)
-
 add_executable(ip_filter src/ip_filter.cpp src/main.cpp)
 
 set_target_properties(ip_filter PROPERTIES
@@ -56,17 +54,12 @@ if(MSVC)
     target_compile_options(ip_filter PRIVATE
         /W4
     )
-    if(WITH_BOOST_TEST)
-        target_compile_options(test_version PRIVATE
-            /W4
-        )
-    endif()
     if(WITH_GOOGLE_TEST)
-        target_compile_options(g_test_version PRIVATE
+        target_compile_options(ip_filter_test PRIVATE
             /W4
         )
     endif()
-else ()
+else()
     target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
