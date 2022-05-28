@@ -19,7 +19,13 @@ struct MyAllocator {
     MyAllocator() :
         _available_memory{0},
         _memory_p{nullptr}
-    {};
+    {
+        _memory_p = reinterpret_cast<T *>(std::malloc(allocation_step * sizeof(T)));
+        if (!_memory_p) {
+            throw std::bad_alloc();
+        }
+        _available_memory = allocation_step;
+    };
 
     ~MyAllocator() = default;
 
@@ -28,17 +34,11 @@ struct MyAllocator {
     }
 
     T *allocate(std::size_t n) {
-        std::cout << "Allocation size: " << n << std::endl;
         if (n <= _available_memory) {
             _available_memory -= n;
             return _memory_p + _available_memory;
         }
-        _memory_p = reinterpret_cast<T *>(std::malloc(allocation_step * sizeof(T)));
-        if (!_memory_p) {
-            throw std::bad_alloc();
-        }
-        _available_memory = allocation_step - n;  /// consider that allocation step > n
-        return _memory_p + _available_memory;
+        throw std::bad_alloc();
     }
 
     void deallocate(T *p, std::size_t n) {
