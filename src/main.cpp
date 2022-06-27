@@ -1,5 +1,4 @@
 #include "allocator.h"
-#include <vector>
 #include <map>
 #include "factorial.h"
 #include "sequence_queue.h"

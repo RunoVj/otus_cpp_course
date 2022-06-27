@@ -88,24 +88,6 @@ public:
         }
     }
 
-//    friend std::ostream& operator<<(std::ostream& os, const SequenceQueue &obj)
-//    {
-//        for (auto i = obj.tail; i < obj.head; ++i) {
-//            os << obj.arr[i] << " ";
-//        }
-//        os << std::endl;
-//        return os;
-//    }
-//
-//    friend std::istream& operator>>(std::istream& is, SequenceQueue &obj)
-//    {
-//        T temp=0;
-//        while ( !obj.is_full() && (is >> temp))
-//            obj.push(temp);
-//        std::cout << "Queue is full!" << std::endl;
-//        return is;
-//    }
-
 private:
     Allocator _allocator;
     size_t _size;
