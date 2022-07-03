@@ -26,16 +26,22 @@ std::array<int, 4> parse4byte_ip_from_str(const std::string &str_ip)
 {
     auto vip = split(str_ip, '.');
     if (vip.size() != 4) {
-        throw std::runtime_error("Wrong ip input: " + str_ip);
+        throw std::runtime_error("Wrong ip size: '" + str_ip + "'");
     }
-    assert(vip.size() == 4);
-    std::array<int, 4> ip = {
-        atoi(vip[0].c_str()),
-        atoi(vip[1].c_str()),
-        atoi(vip[2].c_str()),
-        atoi(vip[3].c_str())
-    };
-    return ip;
+
+    try {
+        std::array<int, 4> ip = {
+            std::stoi(vip[0]),
+            std::stoi(vip[1]),
+            std::stoi(vip[2]),
+            std::stoi(vip[3])
+        };
+        return ip;
+    }
+    catch (const std::invalid_argument &e) {
+        throw std::invalid_argument(
+            "Invalid argument for stoi function in ip " + str_ip);
+    }
 }
 
 
