@@ -12,65 +12,45 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 # for running on windows
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
 
-project(ip_filter VERSION ${PROJECT_VERSION})
+project(print_ip VERSION ${PROJECT_VERSION})
 
 option(WITH_TEST "Whether to build test" ON)
 
-add_executable(ip_filter src/ip_filter.cpp src/main.cpp)
+add_executable(print_ip src/main.cpp)
 
-set_target_properties(ip_filter PROPERTIES
+set_target_properties(print_ip PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(ip_filter PUBLIC
+target_include_directories(print_ip PUBLIC
     "${CMAKE_BINARY_DIR}"
 )
 
-
-if(WITH_TEST)
-    add_subdirectory(dep/googletest)
-    include_directories(${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
-
-    add_executable(ip_filter_test
-            src/ip_filter.cpp
-            test/ip_filter_test.cpp)
-
-    set_target_properties(ip_filter_test PROPERTIES
-        CXX_STANDARD 17
-        CXX_STANDARD_REQUIRED ON
-    )
-
-    target_link_libraries(ip_filter_test
-        gtest
-        gtest_main
-    )
-endif()
-
 if(MSVC)
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(print_ip PRIVATE
         /W4
     )
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(print_ip PRIVATE
         /W4
     )
     if(WITH_GOOGLE_TEST)
-        target_compile_options(ip_filter_test PRIVATE
+        target_compile_options(print_ip_test PRIVATE
             /W4
         )
     endif()
 else()
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(print_ip PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_GOOGLE_TEST)
-        target_compile_options(ip_filter_test PRIVATE
+        target_compile_options(print_ip_test PRIVATE
             -Wall -Wextra -pedantic -Werror
         )
     endif()
 endif()
 
-install(TARGETS ip_filter RUNTIME DESTINATION bin)
+install(TARGETS print_ip RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
@@ -81,5 +61,5 @@ include(CPack)
 
 if(WITH_GOOGLE_TEST)
     enable_testing()
-    add_test(ip_filter_test ip_filter_test)
+    add_test(print_ip_test print_ip_test)
 endif()
