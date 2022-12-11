@@ -60,4 +60,4 @@ jobs:
           enable_jekyll: false
           allow_empty_commit: false
           force_orphan: true
-          publish_branch: 04_template_magic_and_doxygen
+          publish_branch: gh-pages
