@@ -1,7 +1,7 @@
 #pragma once
-#include <tuple>
-#include <string_view>
 #include <string>
+#include <string_view>
+#include <tuple>
 
 namespace Controller {
 
@@ -17,8 +17,8 @@ struct Event {
 };
 
 class IController {
- public:
-  virtual void handle_event(const Event&) = 0;
+public:
+    virtual void handle_event(const Event &) = 0;
 };
 
-} /// end of namespace Controller
+} // namespace Controller
