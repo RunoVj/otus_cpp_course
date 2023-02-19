@@ -4,20 +4,23 @@
 
 #include <string_view>
 #include <list>
+#include <memory>
 
 #include <observer/observer.h>
 
 namespace View {
 
-class UI  {
+class UI : public ISubscriber {
  public:
-  UI();
+  UI(std::weak_ptr<Model::DB> db_p);
   virtual ~UI() = default;
 
-  void render();
+  void update() override;
   void add_button(IButton* btn);
+
  private:
   std::list<IButton*> _btns;
+  std::weak_ptr<Model::DB> _db;
 };
 
 }

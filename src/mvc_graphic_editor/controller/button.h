@@ -4,8 +4,6 @@
 #include <string_view>
 #include <string>
 
-namespace View {
-
 /// IButton - mediator pattern
 class IButton {
  public:
@@ -15,14 +13,12 @@ class IButton {
 
 class Button : public IButton {
  public:
-  explicit Button(int btn_id, std::string_view button_name);
+  explicit Button(int btn_id, std::string_view button_name, Controller::IController &controller);
   void push(const std::string &user_input) override;
   void render() override;
 
  private:
   int _btn_id;
   std::string _button_name;
-  Controller::IController* logic;
+  Controller::IController& _controller;
 };
-
-} /// end of namespace View

@@ -19,18 +19,18 @@ enum LogicEvent {
 
 class Logic : public IController{
  public:
-  Logic(std::unique_ptr<Model::DB> &db, std::unique_ptr<View::UI> &ui);
+  Logic(std::weak_ptr<Model::DB> db, std::unique_ptr<View::UI> &ui);
 
   void handle_event(const Event &) override;
 
- private:
-  View::Button _create_new_file_btn;
-  View::Button _import_file_btn;
-  View::Button _export_file_btn;
-  View::Button _add_item_btn;
-  View::Button _delete_item_btn;
+  Button create_new_file_btn;
+  Button import_file_btn;
+  Button export_file_btn;
+  Button add_item_btn;
+  Button delete_item_btn;
 
-  std::unique_ptr<Model::DB> _db_p;
+ private:
+  std::weak_ptr<Model::DB> _db_p;
   std::unique_ptr<View::UI> _ui_p;
 };
 

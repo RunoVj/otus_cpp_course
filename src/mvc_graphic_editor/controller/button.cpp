@@ -1,24 +1,22 @@
 #include "button.h"
 #include <iostream>
 
-
-View::Button::Button(int btn_id, std::string_view button_name) :
+Button::Button(int btn_id, std::string_view button_name, Controller::IController &controller) :
   _btn_id{btn_id},
-  _button_name{button_name}
-{
-  std::cout << "Add " << button_name << " button" << std::endl;
-}
+  _button_name{button_name},
+  _controller{controller}
+{}
 
-void View::Button::push(const std::string &user_input) {
+void Button::push(const std::string &user_input) {
   std::cout << _button_name + " pressed" << std::endl;
 
   Controller::Event event{};
   event.type = Controller::Event::Type::ButtonPress;
   event.id = _btn_id;
   event.data = user_input;
-  logic->handle_event(event);
+  _controller.handle_event(event);
 }
 
-void View::Button::render() {
+void Button::render() {
   std::cout << "Render " << _button_name << " button" << std::endl;
 }

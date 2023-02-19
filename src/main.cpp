@@ -1,42 +1,22 @@
-#include <iostream>
-
 #include "mvc_graphic_editor/model/db.h"
 #include "mvc_graphic_editor/view/ui.h"
 #include "mvc_graphic_editor/controller/logic.h"
 
-/**
- * Спроектировать простейший графический векторный редактор. Подготовить макеты классов,
-отражающих структуру будущего проекта.
-
-Основной упор сделать на шаблон контроллера (MVC) и полиморфизм. Функции, являющиеся
-обработчиками GUI, собрать в одном файле с функцией `main`.
-
-Внимание должно быть сосредоточено на декларациях, реализация только в крайнем случае для
-минимальной демонстрации необходимых вызовов. Проект должен компилироваться, все
-заголовки должны пройти стадию компиляции.
-Задание считается выполненным успешно, если все файлы прошли стадию компиляции, все классы
-охвачены диаграммами, код успешно прошел анализ.
-
-Дополнительные рекомендации
-1. Заложить в интерфейсы использование умных указателей, тем самым решив вопрос
-владения объектами.
-2. Помнить про принцип единственности ответственности, разделить код на логические
-модули (классы, функции).
-3. Избегать дублирования кода.
- */
-
+#include <iostream>
+#include <filesystem>
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
 {
-  auto db_p = std::make_unique<Model::DB>();
-  auto ui_p = std::make_unique<View::UI>();
+  auto db_p = std::make_shared<Model::DB>(); /// db keeps somewhere else
+  auto ui_p = std::make_unique<View::UI>(std::weak_ptr<Model::DB>(db_p));
 
-  Controller::Logic logic{db_p, ui_p};
+  Controller::Logic logic{std::weak_ptr<Model::DB>(db_p), ui_p};
 
-//  logic.create_new_file("New file");
-//  logic.import_from_file(std::filesystem::path{"./in"});
-//  logic.export_to_file(std::filesystem::path{"./out"});
-//  logic.add_item(Model::Item{});
-//  logic.delete_item(1);
+  std::cout << std::endl;
+  logic.create_new_file_btn.push("Untitled");
+  logic.import_file_btn.push(std::filesystem::path{"./in"}.string());
+  logic.export_file_btn.push(std::filesystem::path{"./out"}.string());
+  logic.add_item_btn.push("New random item");
+  logic.delete_item_btn.push("New random item");
   return 0;
 }
