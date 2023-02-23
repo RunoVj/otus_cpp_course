@@ -7,9 +7,11 @@
 #include <cstdlib>
 #include <map>
 
-
 template<typename T, T initial_value, size_t N = 2>
 class Matrix;
+
+template<typename T, T initial_value>
+class ProxyElement;
 
 template<typename T, T initial_value>
 class Matrix<T, initial_value, 1> {
@@ -20,13 +22,22 @@ public:
         return _m.size();
     };
 
-    T &operator[](const std::size_t idx)
+    ProxyElement<T, initial_value> operator[](const std::size_t idx)
     {
+        auto value = initial_value;
         if (_m.count(idx)) {
-            return _m[idx];
+            value = _m[idx];
+        }
+        return ProxyElement<T, initial_value>{*this, value, idx};
+    }
+
+    void set(T value, size_t key)
+    {
+        if (value != initial_value) {
+            _m.insert_or_assign(key, value);
         }
         else {
-            return _default;
+            _m.erase(key);
         }
     }
 
@@ -57,7 +68,78 @@ public:
         return _m[idx];
     }
 
+    void set(T value, size_t i, size_t j)
+    {
+        if (value != initial_value) {
+            if (!_m.count(i)) {
+                _m[i].set(value, j);
+            }
+        }
+        else if (_m.count(i) != 0 && _m[i].size() == 0) {
+            _m.erase(i);
+        }
+    }
+
+    template<typename... Args>
+    void set(T value, size_t i, size_t j, Args &&...args)
+    {
+        if (value != initial_value) {
+            if (!_m.count(i)) {
+                _m[i].set(value, j, args...);
+            }
+        }
+        else if (_m.count(i) != 0 && _m[i].size() == 0) {
+            _m.erase(i);
+        }
+    }
+
 private:
     T _default = initial_value;
     std::map<size_t, Matrix<T, initial_value, Dimension>> _m;
+};
+
+template<typename T, T initial_value>
+class ProxyElement {
+public:
+    ProxyElement(Matrix<T, initial_value, 1> &matrix, T value, size_t key) :
+        _matrix{matrix}, _value{value}, _key{key} {};
+
+    ProxyElement &operator=(const T &rhs)
+    {
+        if (rhs != initial_value) {
+            _value = rhs;
+            _matrix.set(_value, _key);
+        }
+        return *this;
+    };
+
+    bool operator<(const T &rhs)
+    {
+        return _value < rhs;
+    }
+
+    bool operator>=(const T &rhs)
+    {
+        return !(_value < rhs);
+    }
+
+    bool operator>(const T &rhs)
+    {
+        return _value >= rhs && !(_value > rhs);
+    }
+
+    bool operator<=(const T &rhs)
+    {
+        return !(_value > rhs);
+    }
+
+    bool operator==(const T &rhs)
+    {
+        return !(rhs < _value) && !(rhs > _value);
+    }
+
+private:
+    Matrix<T, initial_value, 1> &_matrix;
+    T _value;
+    size_t _key;
 };
