@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <map>
+#include <stdexcept>
 
 template<typename T, T initial_value, size_t N = 2>
 class Matrix;
@@ -39,6 +40,20 @@ public:
         else {
             _m.erase(key);
         }
+    }
+
+    std::tuple<size_t, T> get_non_default(size_t idx) const
+    {
+        size_t i = 0;
+        for (const auto &[key, value] : _m) {
+            if (i == idx) {
+                return std::make_tuple(key, T(value));
+            }
+            else {
+                i++;
+            }
+        }
+        throw std::logic_error("no element");
     }
 
 private:
@@ -92,6 +107,50 @@ public:
             _m.erase(i);
         }
     }
+
+    decltype(auto) get_non_default(size_t idx) const
+    {
+        auto i = 0;
+        for (const auto &[key, value] : _m) {
+            auto cur_size = value.size();
+            if (i + cur_size > idx) {
+                return std::tuple_cat(std::tuple{key}, value.get_non_default(idx - i));
+            }
+            else {
+                i += cur_size;
+            }
+        }
+        throw std::logic_error{"no elements"};
+    }
+
+    struct Iterator {
+        using value_type = Matrix;
+        using pointer = Matrix *;
+        using difference_type = size_t;
+
+        Iterator(Matrix &matrix, size_t idx) :
+            _matrix{matrix}, _idx{idx} {}
+
+        void operator++() { _idx++; }
+        void operator--() { --_idx; }
+
+        decltype(auto) operator*()
+        {
+            return _matrix.get_non_default(_idx);
+        }
+
+        bool operator==(const Iterator &rhs) { return _idx == rhs._idx; }
+        bool operator!=(const Iterator &rhs) { return _idx != rhs._idx; }
+
+    private:
+        Matrix<T, initial_value, N> &_matrix;
+        size_t _idx;
+    };
+
+    Iterator begin() { return Iterator(*this, 0); }
+    Iterator end() { return Iterator(*this, size()); }
+    Iterator cbegin() const { return Iterator(*this, 0); }
+    Iterator cend() const { return Iterator(*this, size()); }
 
 private:
     T _default = initial_value;

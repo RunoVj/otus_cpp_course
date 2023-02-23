@@ -15,14 +15,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
     matrix[100][100] = 314;
     assert(matrix[100][100] == 314);
     assert(matrix.size() == 1);
+
     // выведется одна строка
     // 100100314
-    //    for (auto c : matrix) {
-    //        int x;
-    //        int y;
-    //        int v;
-    //        std::tie(x, y, v) = c;
-    //        std::cout << x << y << v << std::endl;
-    //    }
+    for (auto c : matrix) {
+        int x;
+        int y;
+        int v;
+        std::tie(x, y, v) = c;
+        std::cout << x << y << v << std::endl;
+    }
     return 0;
 }
