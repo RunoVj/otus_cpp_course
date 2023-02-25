@@ -1,12 +1,11 @@
 #include "matrix.h"
 
-#include <cassert>
 #include <fmt/format.h>
 #include <iostream>
-#include <sstream>
 
-void test_filled_matrix()
+int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
 {
+
     Matrix<int, 0> matrix;
 
     for (uint8_t i = 0; i < 10; ++i) {
@@ -28,13 +27,5 @@ void test_filled_matrix()
         std::tie(x, y, v) = c;
         fmt::print("[{}][{}] = {}\n", x, y, v);
     }
-}
-
-
-int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
-{
-    test_default();
-    test_canonical_form();
-    test_filled_matrix();
     return 0;
 }
