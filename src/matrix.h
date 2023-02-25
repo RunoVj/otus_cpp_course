@@ -172,27 +172,33 @@ public:
         return *this;
     };
 
-    bool operator<(const T &rhs)
+    friend std::ostream &operator<<(std::ostream &os, const ProxyElement &obj)
+    {
+        os << obj._value;
+        return os;
+    }
+
+    bool operator<(const T &rhs) const
     {
         return _value < rhs;
     }
 
-    bool operator>=(const T &rhs)
+    bool operator>=(const T &rhs) const
     {
         return !(_value < rhs);
     }
 
-    bool operator>(const T &rhs)
+    bool operator>(const T &rhs) const
     {
         return _value >= rhs && !(_value > rhs);
     }
 
-    bool operator<=(const T &rhs)
+    bool operator<=(const T &rhs) const
     {
         return !(_value > rhs);
     }
 
-    bool operator==(const T &rhs)
+    bool operator==(const T &rhs) const
     {
         return !(rhs < _value) && !(rhs > _value);
     }

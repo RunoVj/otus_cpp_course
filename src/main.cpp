@@ -1,29 +1,40 @@
 #include "matrix.h"
 
 #include <cassert>
+#include <fmt/format.h>
 #include <iostream>
+#include <sstream>
+
+void test_filled_matrix()
+{
+    Matrix<int, 0> matrix;
+
+    for (uint8_t i = 0; i < 10; ++i) {
+        matrix[i][i] = i;
+        matrix[i][9 - i] = 9 - i;
+    }
+
+    for (uint8_t i = 1; i < 9; ++i) {
+        for (uint8_t j = 1; j < 9; ++j) {
+            std::cout << matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    fmt::print("Filled cells amount: {}\n", matrix.size());
+
+    for (const auto &c : matrix) {
+        int x, y, v;
+        std::tie(x, y, v) = c;
+        fmt::print("[{}][{}] = {}\n", x, y, v);
+    }
+}
 
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[])
 {
-    // бесконечная матрица int заполнена значениями -1
-    Matrix<int, -1> matrix;
-    assert(matrix.size() == 0); // все ячейки свободны
-    auto a = matrix[0][0];
-    assert(a == -1);
-    assert(matrix.size() == 0);
-    matrix[100][100] = 314;
-    assert(matrix[100][100] == 314);
-    assert(matrix.size() == 1);
-
-    // выведется одна строка
-    // 100100314
-    for (auto c : matrix) {
-        int x;
-        int y;
-        int v;
-        std::tie(x, y, v) = c;
-        std::cout << x << y << v << std::endl;
-    }
+    test_default();
+    test_canonical_form();
+    test_filled_matrix();
     return 0;
 }
